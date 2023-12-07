@@ -84,56 +84,51 @@ Add necessary dependencies to the projects.
 1. `dotnet add src/AcmeCorporationApi.Tests/AcmeCorporationApi.Tests.csproj package Microsoft.AspNetCore.TestHost --version 5.0.16`
 2. `dotnet add src/AcmeCorporation.Services.Tests/AcmeCorporation.Services.Tests.csproj package Moq`
 
-### Conclusions
+### Conclusiones
 
-Para expresarme con más detalle voy escribir en español las conclusiones de mi trabajo.
+Para detallar mejor, optaré por escribir en español las conclusiones de mi trabajo.
 
-Voy a empezar por los aspectos más importantes de la arquitectura. Decidí crear varías capas para la aplicación desde un principio pensado en la futura expansión y mantenimiento de la aplicación.
+Comenzaré destacando los aspectos más relevantes de la arquitectura. Desde el principio, diseñé varias capas para la aplicación, pensando en su futura expansión y mantenimiento.
 
-Cada capa tiene la siguiente característica:
+Cada capa posee características específicas:
 
-- La Api, la he limpiado y quitado dependecias como la base de datos. Dejándola como proveedor de acceso e inyectándole los servicios que necesarios.
+- La API ha sido optimizada, eliminando dependencias como la base de datos, y configurada para actuar como un proveedor de acceso, inyectando los servicios necesarios.
 
-- La capa de infraestructura es la que encarga del acceso y manejo de la base de datos.
+- La capa de infraestructura se encarga del acceso y manejo de la base de datos.
 
-- La capa de servicios es donde centraremos nuestra lógica de negocio y validaciones.
+- En la capa de servicios se centraliza la lógica de negocio y las validaciones.
 
-- La capa Core tiene como objetivo recoger todos los contratos (interfaces) y entidades centrales de la aplicación.
+- La capa Core tiene el propósito de aglutinar todos los contratos (interfaces) y entidades centrales de la aplicación.
 
-Una vez definidas las capas y responsabilidades de cada una solo queda iterar y empezar a crear las funcionalidades solicitadas. En este caso la obtención de datos relacionados con personas y su tipo de documento.
+Definidas las capas y sus responsabilidades, el siguiente paso es iterar y comenzar a crear las funcionalidades requeridas. En este caso, la obtención de datos relacionados con personas y sus tipos de documento.
 
-He intentado seguir los principios SOLID y sobre todo el principio de responsabilidad única por ello decidí crear un servicio de "DocumentTypeService" que se encarga mediante expresiones regulares de asignar el tipo de documento a una persona era un requisito y también pensado en una futura expansión donde se agreguen nuevo tipos de documentos este servicio pueda ser remplazado por otro.
+He seguido los principios SOLID, en especial el principio de responsabilidad única. Por ello, creé el servicio "DocumentTypeService", que mediante expresiones regulares asigna el tipo de documento a una persona. Fue un requisito pensado también para futuras expansiones, donde, al añadir nuevos tipos de documentos, este servicio pueda ser reemplazado fácilmente.
 
 ---
 
-> Finally, it seems that the `POST` method of the `PersonsController` allows you to send the Person `id` field and that's not right, you should do something about it.
+> Finalmente, parece que el método `POST` del `PersonsController` permite enviar el campo `id` de la Persona, lo cual no es correcto y debería modificarse.
 
-Para la cuestión anterior citada decide crear un tipo de dato Record que no incluyera el campo `id`.
+Para abordar el problema mencionado, decidí crear un tipo de dato `Record` que excluyera el campo `id`:
 
-```
 public record PersonSaveModel(string Name, int Age, string Document);
-```
+
 
 ---
 
-### Pruebas de integración y unitarias
+### Pruebas de Integración y Unitarias
 
-En la parte de integración decidí basarme en el siguiente punto:
+En cuanto a las pruebas de integración, me basé en la siguiente premisa:
 
-> really want is to test the API as a black box, consuming it as an end user.
+> Lo que realmente queremos es probar la API como una caja negra, consumiéndola como un usuario final.
 
-Por ello empece a generar varias pruebas donde vi la necesidad de agregar un método de `borrado` para poder conservar la integridad de la base de datos y realizar diversos tipo de pruebas.
+Así, inicié la generación de varias pruebas, viendo la necesidad de agregar un método de `borrado` para mantener la integridad de la base de datos y realizar diversos tipos de pruebas.
 
-Creo que puedo invertir más tiempo y realizar un refactor sobre la base de pila de pruebas que realice y al mismo tiempo estos test me daban nuevas ideas de mejorar la lógica de negocio.
+Creo que es posible invertir más tiempo en refactorizar la pila de pruebas realizadas. Estos tests también me han brindado nuevas ideas para mejorar la lógica de negocio.
 
-### .NET5 VS NET6
+### .NET 5 vs .NET 6
 
-El proyecto api aportado estaba en la versión de .Net 5, pense en realizar una migración a la versión de .Net 6 pero esto llevaría una serie de cambios que implicarían mas tiempo y dedicación a la prueba.
+El proyecto API proporcionado estaba en la versión .NET 5. Consideré migrar a .NET 6, pero esto implicaría una serie de cambios que requerirían más tiempo y dedicación.
 
-Es algo que tuve que analizar desde al empezar la prueba dado que mencionáis de hacer el código nuestro y es algo que mi en lo personal me gusta intentar utilizar la versión mas estable de código pero evaluando si es posible hacerlo.
+Fue algo que tuve que analizar desde el inicio, dado que se menciona la importancia de personalizar el código. Personalmente, me gusta intentar utilizar la versión más estable del código, evaluando si es factible hacer la actualización.
 
 ## Consultas SQL
-
-Para las consultas SQL las que han representado un reto para mi ha sido la 2 y 3.
-
-Es un tema que tengo pendiente de investigar y aprender más pero mi perfil de programador me he orientado más aun full stack y aunque no sea mi fuerte la gestión y optimización de base de datos he trabajado creando vistas, procedimientos y funciones para la gestión de datos.
